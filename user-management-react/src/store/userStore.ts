@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 import { fetchUsers } from '../api/users';
-import { User } from "../types";
-
+import { User } from "../types";  
 interface UserState {
   users: User[];
   loading: boolean;
@@ -15,7 +14,8 @@ export const useUserStore = create<UserState>((set) => ({
   error: null,
 
   fetchAllUsers: async () => {
-    set({ loading: true, error: null }); 
+    set({ loading: true, error: null });
+
     try {
       const data = await fetchUsers();
       set({ users: data.data, loading: false });

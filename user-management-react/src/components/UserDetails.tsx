@@ -1,8 +1,16 @@
-import { 
-  Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, 
-  Text, Image, VStack 
+import {
+  Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody,
+  Text, Image, VStack
 } from "@chakra-ui/react";
-import { User } from "../types";
+
+interface User {
+  id: number;
+  email: string;
+  first_name: string;
+  last_name: string;
+  avatar: string;
+  job?: string;
+}
 
 interface UserDetailsModalProps {
   isOpen: boolean;
@@ -20,24 +28,20 @@ const UserDetails = ({ isOpen, onClose, user }: UserDetailsModalProps) => {
         <ModalBody p={4}>
           {user ? (
             <VStack spacing={4} align="center">
-              
-              <Image 
-                borderRadius="full" 
-                boxSize="120px" 
-                src={user.avatar || "https://via.placeholder.com/120"} 
-                alt={user.first_name} 
+              <Image
+                borderRadius="full"
+                boxSize="120px"
+                src={user.avatar}
+                alt={user.first_name}
                 boxShadow="md"
               />
 
-             
               <Text fontSize="lg" fontWeight="bold">
                 {user.first_name} {user.last_name}
               </Text>
-              
               <Text color="gray.600">
                 <strong>Email:</strong> {user.email}
               </Text>
-
               {user.job && (
                 <Text color="blue.500">
                   <strong>Job:</strong> {user.job}

@@ -1,7 +1,12 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Button, useDisclosure, useToast, Spinner, HStack } from '@chakra-ui/react';
-import { 
-  fetchUsersDelayed, fetchUserById, createUser, updateUser, patchUser, deleteUser as deleteExistingUser 
+import {
+  fetchUsersDelayed,
+  fetchUserById,
+  createUser,
+  updateUser,
+  patchUser,
+  deleteUser as deleteExistingUser,
 } from '../api/users';
 import UserTable from '../components/UserTable';
 import SearchFilter from '../components/SearchFilter';
@@ -9,7 +14,7 @@ import Pagination from '../components/Pagination';
 import UserDetailsModal from '../components/UserDetails';
 import UserModal from '../components/UserModal';
 import { useAuthStore } from '../store/authStore';
-import { useQuery, useMutation, UseQueryResult } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import { useTheme } from '../context/ThemeContext';
 import { useNavigate } from 'react-router-dom';
 import { User } from '../types';
@@ -20,22 +25,19 @@ const Dashboard = () => {
   const [search, setSearch] = useState<string>('');
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [modalMode, setModalMode] = useState<'add' | 'edit' | 'patch'>('add');
-  const [usersList, setUsersList] = useState<User[]>([]); 
+  const [usersList, setUsersList] = useState<User[]>([]);
 
-  
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isOpen: isDetailsOpen, onOpen: openDetails, onClose: closeDetails } = useDisclosure();
-
   const toast = useToast();
   const navigate = useNavigate();
   const { isAuthenticated, logout } = useAuthStore();
 
   useEffect(() => {
-    if (!isAuthenticated) navigate("/login");
+    if (!isAuthenticated) navigate('/login');
   }, [isAuthenticated, navigate]);
 
-  
-  const { data, refetch, isLoading }: UseQueryResult<{ data: User[]; total_pages: number }, Error> = useQuery({
+  const { data, refetch, isLoading } = useQuery({
     queryKey: ['users', page],
     queryFn: () => fetchUsersDelayed(page),
     staleTime: 60000,
@@ -49,7 +51,6 @@ const Dashboard = () => {
 
   const totalPages: number = data?.total_pages ?? 1;
 
-  
   const filteredUsers: User[] = useMemo(() => {
     return usersList.filter((user) =>
       user.first_name.toLowerCase().includes(search.toLowerCase()) ||
@@ -58,7 +59,6 @@ const Dashboard = () => {
     );
   }, [search, usersList]);
 
-  
   const createUserMutation = useMutation({
     mutationFn: async (userData: Partial<User>) => {
       const response = await createUser(userData as Required<User>);
@@ -122,7 +122,6 @@ const Dashboard = () => {
     },
   });
 
-  
   const viewUserDetails = async (id: number) => {
     try {
       const userDetails = await fetchUserById(id);
@@ -162,24 +161,18 @@ const Dashboard = () => {
         </>
       )}
 
-      <UserDetailsModal 
-        isOpen={isDetailsOpen} 
-        onClose={closeDetails} 
-        user={selectedUser} 
-      />
+      <UserDetailsModal isOpen={isDetailsOpen} onClose={closeDetails} user={selectedUser} />
 
-      <UserModal 
-        isOpen={isOpen} 
-        onClose={onClose} 
-        mode={modalMode} 
-        defaultValues={selectedUser ?? {}} 
+      <UserModal
+        isOpen={isOpen}
+        onClose={onClose}
+        mode={modalMode}
+        defaultValues={selectedUser ?? {}}
         onSubmit={(userData) => {
           if (modalMode === 'add') createUserMutation.mutate(userData);
-          else if (modalMode === 'edit' && selectedUser?.id) 
-            updateUserMutation.mutate({ id: selectedUser.id, userData });
-          else if (modalMode === 'patch' && selectedUser?.id) 
-            patchUserMutation.mutate({ id: selectedUser.id, userData });
-        }} 
+          else if (modalMode === 'edit' && selectedUser?.id) updateUserMutation.mutate({ id: selectedUser.id, userData });
+          else if (modalMode === 'patch' && selectedUser?.id) patchUserMutation.mutate({ id: selectedUser.id, userData });
+        }}
       />
     </div>
   );

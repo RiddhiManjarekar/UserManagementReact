@@ -1,6 +1,10 @@
 import { create } from 'zustand';
 import { loginUser, registerUser } from '../api/auth';
-import { Credentials } from '../types';
+
+interface Credentials {
+  email: string;
+  password: string;
+}
 
 interface User {
   id: number;

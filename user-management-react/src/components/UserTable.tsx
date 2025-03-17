@@ -7,11 +7,11 @@ interface UserTableProps {
   onEdit: (user: User) => void;
   onDelete: (id: number) => void;
   onView: (id: number) => void;
-  onPatch: (user: User) => void;
+  onPatch?: (user: User) => void; // Optional if you want to support patching
 }
 
 const UserTable = memo(({ users, onEdit, onDelete, onView, onPatch }: UserTableProps) => (
-  <Table variant="simple" size="md" colorScheme="gray">
+  <Table variant="striped" size="md" colorScheme="gray">
     <Thead>
       <Tr>
         <Th>Avatar</Th>
@@ -24,14 +24,14 @@ const UserTable = memo(({ users, onEdit, onDelete, onView, onPatch }: UserTableP
       {users.map(user => (
         <Tr key={user.id}>
           <Td>
-  <Avatar src={user.avatar} name={`${user.first_name} ${user.last_name}`} />
-</Td>
+            <Avatar src={user.avatar} name={`${user.first_name} ${user.last_name}`} />
+          </Td>
           <Td>{user.first_name} {user.last_name}</Td>
           <Td>{user.email}</Td>
           <Td>
             <ButtonGroup spacing={2}>
               <Button colorScheme="blue" onClick={() => onEdit(user)}>Edit</Button>
-              <Button colorScheme="yellow" onClick={() => onPatch(user)}>Patch</Button>
+              {onPatch && <Button colorScheme="yellow" onClick={() => onPatch(user)}>Patch</Button>}
               <Button colorScheme="red" onClick={() => onDelete(user.id)}>Delete</Button>
               <Button colorScheme="teal" onClick={() => onView(user.id)}>View Details</Button>
             </ButtonGroup>

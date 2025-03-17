@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { loginUser } from '../api/auth';
 import { useAuthStore } from '../store/authStore';
-import { useNavigate,Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Input, Button, VStack, Text, useToast, FormControl, FormLabel, FormErrorMessage } from '@chakra-ui/react';
 
 interface LoginInputs {
@@ -14,8 +14,8 @@ const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<LoginInputs>();
   const login = useAuthStore((state) => state.login);
   const navigate = useNavigate();
-  const [error, setError] = useState('');
   const toast = useToast();
+  const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit: SubmitHandler<LoginInputs> = async (data) => {
@@ -23,7 +23,7 @@ const Login = () => {
     try {
       const response = await loginUser(data);
       if (response.token) {
-        login({ email: data.email, password: data.password }); 
+        login({ email: data.email, password: data.password });
         toast({ title: 'Login Successful!', status: 'success', duration: 2000 });
         setTimeout(() => navigate('/dashboard'), 100);
       } else {
@@ -35,20 +35,7 @@ const Login = () => {
       setIsLoading(false);
     }
   };
-  
-  if (error) {
-    toast({
-      title: "Login Failed",
-      description: error,
-      status: "error",
-      duration: 3000,
-      isClosable: true,
-    });
-  }
-  
-  
-  
-  
+
   return (
     <VStack spacing={4} p={6}>
       <Text fontSize="2xl">Admin Login</Text>
@@ -66,7 +53,7 @@ const Login = () => {
           />
           <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
         </FormControl>
-        
+
         <FormControl isInvalid={!!errors.password}>
           <FormLabel>Password</FormLabel>
           <Input 
@@ -81,12 +68,12 @@ const Login = () => {
         {error && <Text color="red.500">{error}</Text>}
 
         <Button colorScheme="blue" type="submit" width="full" isLoading={isLoading}>
-    Login
-  </Button>
-  <Text>
-  Don't have an account? <Link to="/register" color="blue.500">Sign up here</Link>
-</Text>
+          Login
+        </Button>
 
+        <Text>
+          Don't have an account? <Link to="/register" style={{ color: 'blue' }}>Sign up here</Link>
+        </Text>
       </form>
     </VStack>
   );

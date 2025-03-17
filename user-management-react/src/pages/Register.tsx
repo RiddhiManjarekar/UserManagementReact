@@ -57,7 +57,6 @@ const Register = () => {
       <Text fontSize="2xl">Register</Text>
       <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
         
-        
         <FormControl isInvalid={!!errors.name}>
           <FormLabel>Name</FormLabel>
           <Input 
@@ -68,7 +67,6 @@ const Register = () => {
           <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
         </FormControl>
 
-        
         <FormControl isInvalid={!!errors.email}>
           <FormLabel>Email</FormLabel>
           <Input 
@@ -85,7 +83,6 @@ const Register = () => {
           <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
         </FormControl>
         
-        
         <FormControl isInvalid={!!errors.password}>
           <FormLabel>Password</FormLabel>
           <Input 
@@ -99,7 +96,6 @@ const Register = () => {
           <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
         </FormControl>
 
-        
         <FormControl isInvalid={!!errors.confirmPassword}>
           <FormLabel>Confirm Password</FormLabel>
           <Input 
@@ -113,10 +109,8 @@ const Register = () => {
           <FormErrorMessage>{errors.confirmPassword?.message}</FormErrorMessage>
         </FormControl>
 
-       
         {error && <Text color="red.500">{error}</Text>}
 
-        
         <Button 
           colorScheme="blue" 
           type="submit" 
